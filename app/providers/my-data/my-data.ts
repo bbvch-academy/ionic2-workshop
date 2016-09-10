@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
-import { TaskListModel} from '../../models/task-list-model';
+//import { TaskListModel} from '../../models/task-list-model';
 /*
   Generated class for the MyData provider.
 
@@ -13,7 +13,7 @@ export class MyData {
 
   constructor(private http: Http) {}
   
-  getData() : Promise<TaskListModel> {
+  getData() {
     return new Promise(resolve => {
       // We're using Angular Http provider to request the data,
       // then on the response it'll map the JSON data to a parsed JS object.
@@ -23,7 +23,7 @@ export class MyData {
         .subscribe(data => {
           // we've got back the raw data, now generate the core schedule data
           // and save the data for later reference
-          resolve(new TaskListModel(data));
+          resolve(data);
         });
     });
   }
