@@ -1,6 +1,6 @@
 {
-  "name": "My Ionic App",
-  "short_name": "My Ionic App",
+  "name": "Todo App",
+  "short_name": "TodoApp",
   "start_url": "index.html",
   "display": "standalone",
   "icons": [{
