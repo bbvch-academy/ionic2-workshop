@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { MyData } from '../../providers/my-data/my-data';
+import { TaskListModel} from '../../models/task-list-model';
 
 @Component({
   templateUrl: 'build/pages/home/home.html',
@@ -8,7 +9,7 @@ import { MyData } from '../../providers/my-data/my-data';
 })
 export class HomePage {
 
-  private taskList;
+  private taskList : TaskListModel;
 
   constructor(public navCtrl: NavController, private dataService: MyData) {
     dataService.getData().then(data => this.taskList = data);
