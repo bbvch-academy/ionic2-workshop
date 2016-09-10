@@ -1,4 +1,4 @@
-# ionic2workshop
+# ionic2-workshop
 
 A step-by-step TODO app for the bbv Academy
 
