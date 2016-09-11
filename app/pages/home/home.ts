@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, LoadingController, Loading } from 'ionic-angular';
 import { MyData } from '../../providers/my-data/my-data';
 //import { TaskListModel } from '../../models/task-list-model';
 
@@ -10,9 +10,24 @@ import { MyData } from '../../providers/my-data/my-data';
 export class HomePage {
 
   public taskList;
+  private loading: Loading;
 
-  constructor(public navCtrl: NavController, private dataService: MyData) {
-    dataService.getData().then(data => this.taskList = data);
+  constructor(public navCtrl: NavController, private dataService: MyData, private loadingCtrl: LoadingController) {
+    this.loading = this.loadingCtrl.create({
+      content: "Loading...",
+      dismissOnPageChange: true
+    });
+  }
+
+  ionViewWillEnter() {
+    this.dataService.getData().then(data => {
+      this.taskList = data;
+      this.loading.dismiss();
+    });
     console.log(this.taskList);
+  }
+
+  ionViewDidEnter() {
+    this.loading.present();
   }
 }
