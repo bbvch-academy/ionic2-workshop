@@ -70,6 +70,13 @@ var HomePage = (function () {
     HomePage.prototype.ionViewDidEnter = function () {
         this.loading.present();
     };
+    HomePage.prototype.doRefresh = function (refresher) {
+        var _this = this;
+        this.dataService.getData().then(function (data) {
+            _this.taskList = data;
+            refresher.complete();
+        });
+    };
     HomePage = __decorate([
         core_1.Component({
             templateUrl: 'build/pages/home/home.html',
@@ -114,7 +121,7 @@ var MyData = (function () {
             // then on the response it'll map the JSON data to a parsed JS object.
             // Next we process the data and resolve the promise with the new data.
             _this.http.get('assets/data.json')
-                .delay(3000)
+                .delay(20000)
                 .map(function (res) { return res.json(); })
                 .subscribe(function (data) {
                 // we've got back the raw data, now generate the core schedule data

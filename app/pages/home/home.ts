@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, LoadingController, Loading } from 'ionic-angular';
+import { NavController, LoadingController, Loading, Refresher } from 'ionic-angular';
 import { MyData } from '../../providers/my-data/my-data';
 //import { TaskListModel } from '../../models/task-list-model';
 
@@ -29,5 +29,12 @@ export class HomePage {
 
   ionViewDidEnter() {
     this.loading.present();
+  }
+
+  doRefresh(refresher: Refresher) {
+    this.dataService.getData().then(data => {
+      this.taskList = data;
+      refresher.complete();
+    });
   }
 }
