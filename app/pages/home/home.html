@@ -16,9 +16,14 @@
     </ion-refresher-content>
   </ion-refresher>
   <ion-list>
-    <ion-item *ngFor="let item of taskList" (click)="itemTapped($event, item)">
-      <ion-checkbox [checked]="item.completed"></ion-checkbox>
+    <button ion-item detailPush *ngFor="let item of taskList" (click)="itemTapped($event, item)">
+      <!--<ion-checkbox [(ngModel)]="item.completed"></ion-checkbox>-->
       <ion-label>{{item.title}}</ion-label>
-    </ion-item>  
+      <button clear item-left (click)="checkboxTapped($event, item)">
+        <ion-icon *ngIf="!item.completed" name="square-outline"></ion-icon>
+        <ion-icon *ngIf="item.completed" name="checkbox-outline"></ion-icon>
+      </button>
+    </button> 
+     
   </ion-list>
 </ion-content>

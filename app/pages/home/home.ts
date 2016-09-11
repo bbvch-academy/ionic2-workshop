@@ -37,4 +37,15 @@ export class HomePage {
       refresher.complete();
     });
   }
+
+  itemTapped($event: MouseEvent, item) {
+    console.log('itemTapped '+event);
+    
+  }
+
+  checkboxTapped($event: MouseEvent, item) {
+    $event.stopPropagation();
+    console.log('checkboxTapped '+event);
+    item.completed = !item.completed;
+  }
 }

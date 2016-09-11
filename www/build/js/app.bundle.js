@@ -77,6 +77,14 @@ var HomePage = (function () {
             refresher.complete();
         });
     };
+    HomePage.prototype.itemTapped = function ($event, item) {
+        console.log('itemTapped ' + event);
+    };
+    HomePage.prototype.checkboxTapped = function ($event, item) {
+        $event.stopPropagation();
+        console.log('checkboxTapped ' + event);
+        item.completed = !item.completed;
+    };
     HomePage = __decorate([
         core_1.Component({
             templateUrl: 'build/pages/home/home.html',
@@ -121,7 +129,7 @@ var MyData = (function () {
             // then on the response it'll map the JSON data to a parsed JS object.
             // Next we process the data and resolve the promise with the new data.
             _this.http.get('assets/data.json')
-                .delay(2000)
+                .delay(1)
                 .map(function (res) { return res.json(); })
                 .subscribe(function (data) {
                 // we've got back the raw data, now generate the core schedule data
