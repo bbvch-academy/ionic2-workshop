@@ -49,4 +49,9 @@ export class HomePage {
     console.log('checkboxTapped '+event);
     item.completed = !item.completed;
   }
+
+  addItemButtonTapped($event) {
+    console.log('addItemButtonTapped');
+    
+  }
 }

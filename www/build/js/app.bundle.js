@@ -87,6 +87,9 @@ var HomePage = (function () {
         console.log('checkboxTapped ' + event);
         item.completed = !item.completed;
     };
+    HomePage.prototype.addItemButtonTapped = function ($event) {
+        console.log('addItemButtonTapped');
+    };
     HomePage = __decorate([
         core_1.Component({
             templateUrl: 'build/pages/home/home.html',
