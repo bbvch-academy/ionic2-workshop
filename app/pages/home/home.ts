@@ -41,7 +41,7 @@ export class HomePage {
 
   itemTapped($event: MouseEvent, item) {
     console.log('itemTapped '+event);
-    this.navCtrl.push(ItemDetailPage, item);
+    this.navCtrl.push(ItemDetailPage, {'item': item});
   }
 
   checkboxTapped($event: MouseEvent, item) {

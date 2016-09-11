@@ -80,7 +80,7 @@ var HomePage = (function () {
     };
     HomePage.prototype.itemTapped = function ($event, item) {
         console.log('itemTapped ' + event);
-        this.navCtrl.push(item_detail_1.ItemDetailPage, item);
+        this.navCtrl.push(item_detail_1.ItemDetailPage, { 'item': item });
     };
     HomePage.prototype.checkboxTapped = function ($event, item) {
         $event.stopPropagation();
@@ -118,14 +118,16 @@ var ionic_angular_1 = require('ionic-angular');
   Ionic pages and navigation.
 */
 var ItemDetailPage = (function () {
-    function ItemDetailPage(navCtrl) {
+    function ItemDetailPage(navCtrl, params) {
         this.navCtrl = navCtrl;
+        this.params = params;
+        this.item = params.get('item');
     }
     ItemDetailPage = __decorate([
         core_1.Component({
             templateUrl: 'build/pages/item-detail/item-detail.html',
         }), 
-        __metadata('design:paramtypes', [ionic_angular_1.NavController])
+        __metadata('design:paramtypes', [ionic_angular_1.NavController, ionic_angular_1.NavParams])
     ], ItemDetailPage);
     return ItemDetailPage;
 }());
