@@ -56,6 +56,7 @@ var HomePage = (function () {
         this.dataService = dataService;
         this.loadingCtrl = loadingCtrl;
         this.modalCtrl = modalCtrl;
+        this.taskList = [];
         this.loading = this.loadingCtrl.create({
             content: "Loading...",
             dismissOnPageChange: true
@@ -89,14 +90,24 @@ var HomePage = (function () {
         item.completed = !item.completed;
     };
     HomePage.prototype.addItemButtonTapped = function ($event) {
+        var _this = this;
         console.log('addItemButtonTapped');
         var controller = this.modalCtrl.create(item_detail_1.ItemDetailPage);
         controller.onDidDismiss(function (data) {
             console.log(data);
+            // Add new item to our list
+            if (data !== undefined) {
+                _this.addItem(data);
+            }
             // Hack: Without this line the would remain stuck
             controller.destroy();
         });
         controller.present();
+    };
+    HomePage.prototype.addItem = function (newItem) {
+        var index = this.taskList.length - 1;
+        newItem.id = this.taskList[index].id + 1;
+        this.taskList.push(newItem);
     };
     HomePage = __decorate([
         core_1.Component({

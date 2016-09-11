@@ -10,7 +10,7 @@ import { ItemDetailPage } from '../item-detail/item-detail';
 })
 export class HomePage {
 
-  public taskList;
+  public taskList = [];
   private loading: Loading;
 
   constructor(public navCtrl: NavController, private dataService: MyData, private loadingCtrl: LoadingController, private modalCtrl: ModalController) {
@@ -22,7 +22,7 @@ export class HomePage {
 
   ionViewLoaded() {
     this.dataService.getData().then(data => {
-      this.taskList = data;
+      this.taskList = data as [];
       this.loading.dismiss();
     });
     console.log(this.taskList);
@@ -34,7 +34,7 @@ export class HomePage {
 
   doRefresh(refresher: Refresher) {
     this.dataService.getData().then(data => {
-      this.taskList = data;
+      this.taskList = data as [];
       refresher.complete();
     });
   }
@@ -55,9 +55,21 @@ export class HomePage {
     let controller = this.modalCtrl.create(ItemDetailPage);
     controller.onDidDismiss(data => {
       console.log(data)
+      // Add new item to our list
+      if (data !== undefined)
+      {
+        this.addItem(data);
+      }
       // Hack: Without this line the would remain stuck
       controller.destroy();
     });
     controller.present();
   }
+
+  addItem(newItem) {
+    let index = this.taskList.length -1 ;
+    newItem.id = this.taskList[index].id + 1;
+    this.taskList.push(newItem);
+  }
 }
+
