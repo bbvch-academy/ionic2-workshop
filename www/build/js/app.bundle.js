@@ -60,7 +60,7 @@ var HomePage = (function () {
             dismissOnPageChange: true
         });
     }
-    HomePage.prototype.ionViewWillEnter = function () {
+    HomePage.prototype.ionViewLoaded = function () {
         var _this = this;
         this.dataService.getData().then(function (data) {
             _this.taskList = data;

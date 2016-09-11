@@ -20,7 +20,7 @@ export class HomePage {
     });
   }
 
-  ionViewWillEnter() {
+  ionViewLoaded() {
     this.dataService.getData().then(data => {
       this.taskList = data;
       this.loading.dismiss();
