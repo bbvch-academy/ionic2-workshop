@@ -51,10 +51,11 @@ var my_data_1 = require('../../providers/my-data/my-data');
 //import { TaskListModel } from '../../models/task-list-model';
 var item_detail_1 = require('../item-detail/item-detail');
 var HomePage = (function () {
-    function HomePage(navCtrl, dataService, loadingCtrl) {
+    function HomePage(navCtrl, dataService, loadingCtrl, modalCtrl) {
         this.navCtrl = navCtrl;
         this.dataService = dataService;
         this.loadingCtrl = loadingCtrl;
+        this.modalCtrl = modalCtrl;
         this.loading = this.loadingCtrl.create({
             content: "Loading...",
             dismissOnPageChange: true
@@ -89,13 +90,20 @@ var HomePage = (function () {
     };
     HomePage.prototype.addItemButtonTapped = function ($event) {
         console.log('addItemButtonTapped');
+        var controller = this.modalCtrl.create(item_detail_1.ItemDetailPage);
+        controller.onDidDismiss(function (data) {
+            console.log(data);
+            // Hack: Without this line the would remain stuck
+            controller.destroy();
+        });
+        controller.present();
     };
     HomePage = __decorate([
         core_1.Component({
             templateUrl: 'build/pages/home/home.html',
             providers: [my_data_1.MyData]
         }), 
-        __metadata('design:paramtypes', [ionic_angular_1.NavController, my_data_1.MyData, ionic_angular_1.LoadingController])
+        __metadata('design:paramtypes', [ionic_angular_1.NavController, my_data_1.MyData, ionic_angular_1.LoadingController, ionic_angular_1.ModalController])
     ], HomePage);
     return HomePage;
 }());
@@ -121,16 +129,28 @@ var ionic_angular_1 = require('ionic-angular');
   Ionic pages and navigation.
 */
 var ItemDetailPage = (function () {
-    function ItemDetailPage(navCtrl, params) {
+    function ItemDetailPage(navCtrl, params, viewCtrl) {
         this.navCtrl = navCtrl;
         this.params = params;
+        this.viewCtrl = viewCtrl;
+        this.isNewTask = false;
         this.item = params.get('item');
+        if (this.item === undefined) {
+            this.item = { title: 'New Task' };
+            this.isNewTask = true;
+        }
     }
+    ItemDetailPage.prototype.saveNewTaskButtonTapped = function ($event) {
+        this.viewCtrl.dismiss(this.item);
+    };
+    ItemDetailPage.prototype.cancelButtonTapped = function ($event) {
+        this.viewCtrl.dismiss();
+    };
     ItemDetailPage = __decorate([
         core_1.Component({
             templateUrl: 'build/pages/item-detail/item-detail.html',
         }), 
-        __metadata('design:paramtypes', [ionic_angular_1.NavController, ionic_angular_1.NavParams])
+        __metadata('design:paramtypes', [ionic_angular_1.NavController, ionic_angular_1.NavParams, ionic_angular_1.ViewController])
     ], ItemDetailPage);
     return ItemDetailPage;
 }());

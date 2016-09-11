@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, LoadingController, Loading, Refresher } from 'ionic-angular';
+import { NavController, LoadingController, Loading, Refresher, ModalController } from 'ionic-angular';
 import { MyData } from '../../providers/my-data/my-data';
 //import { TaskListModel } from '../../models/task-list-model';
 import { ItemDetailPage } from '../item-detail/item-detail';
@@ -13,7 +13,7 @@ export class HomePage {
   public taskList;
   private loading: Loading;
 
-  constructor(public navCtrl: NavController, private dataService: MyData, private loadingCtrl: LoadingController) {
+  constructor(public navCtrl: NavController, private dataService: MyData, private loadingCtrl: LoadingController, private modalCtrl: ModalController) {
     this.loading = this.loadingCtrl.create({
       content: "Loading...",
       dismissOnPageChange: true
@@ -52,6 +52,12 @@ export class HomePage {
 
   addItemButtonTapped($event) {
     console.log('addItemButtonTapped');
-    
+    let controller = this.modalCtrl.create(ItemDetailPage);
+    controller.onDidDismiss(data => {
+      console.log(data)
+      // Hack: Without this line the would remain stuck
+      controller.destroy();
+    });
+    controller.present();
   }
 }

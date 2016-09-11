@@ -8,6 +8,16 @@
 
   <ion-navbar>
     <ion-title>{{item.title}}</ion-title>
+    <ion-buttons start *ngIf="isNewTask">
+      <button (click)="cancelButtonTapped($event)">
+        Cancel
+      </button>
+  </ion-buttons>
+  <ion-buttons end *ngIf="isNewTask">
+      <button (click)="saveNewTaskButtonTapped($event)">
+        Save
+      </button>
+  </ion-buttons>
   </ion-navbar>
 
 </ion-header>
