@@ -82,7 +82,7 @@ var HomePage = (function () {
     };
     HomePage.prototype.itemTapped = function ($event, item) {
         console.log('itemTapped ' + event);
-        this.navCtrl.push(item_detail_1.ItemDetailPage, { 'item': item });
+        this.navCtrl.push(item_detail_1.ItemDetailPage, { 'item': item, 'parent': this });
     };
     HomePage.prototype.checkboxTapped = function ($event, item) {
         $event.stopPropagation();
@@ -108,6 +108,14 @@ var HomePage = (function () {
         var index = this.taskList.length - 1;
         newItem.id = this.taskList[index].id + 1;
         this.taskList.push(newItem);
+    };
+    HomePage.prototype.deleteItem = function (item) {
+        for (var i = 0; i < this.taskList.length; i++) {
+            if (this.taskList[i] == item) {
+                this.taskList.splice(i, 1);
+                break;
+            }
+        }
     };
     HomePage = __decorate([
         core_1.Component({
@@ -140,10 +148,11 @@ var ionic_angular_1 = require('ionic-angular');
   Ionic pages and navigation.
 */
 var ItemDetailPage = (function () {
-    function ItemDetailPage(navCtrl, params, viewCtrl) {
+    function ItemDetailPage(navCtrl, params, viewCtrl, alertCtrl) {
         this.navCtrl = navCtrl;
         this.params = params;
         this.viewCtrl = viewCtrl;
+        this.alertCtrl = alertCtrl;
         this.isNewTask = false;
         this.item = params.get('item');
         if (this.item === undefined) {
@@ -157,11 +166,33 @@ var ItemDetailPage = (function () {
     ItemDetailPage.prototype.cancelButtonTapped = function ($event) {
         this.viewCtrl.dismiss();
     };
+    ItemDetailPage.prototype.deleteButtonTapped = function ($event) {
+        var _this = this;
+        var alert = this.alertCtrl.create({
+            title: 'Delete Task',
+            message: "Do you really want to delete " + this.item.title + "?",
+            buttons: [
+                {
+                    text: 'Cancel',
+                    handler: function () { }
+                },
+                {
+                    text: 'Delete',
+                    handler: function () {
+                        var parent = _this.params.get("parent");
+                        parent.deleteItem(_this.item);
+                        var navTransition = alert.dismiss();
+                        navTransition.then(function () { return _this.viewCtrl.dismiss(); });
+                    }
+                }]
+        });
+        alert.present();
+    };
     ItemDetailPage = __decorate([
         core_1.Component({
             templateUrl: 'build/pages/item-detail/item-detail.html',
         }), 
-        __metadata('design:paramtypes', [ionic_angular_1.NavController, ionic_angular_1.NavParams, ionic_angular_1.ViewController])
+        __metadata('design:paramtypes', [ionic_angular_1.NavController, ionic_angular_1.NavParams, ionic_angular_1.ViewController, ionic_angular_1.AlertController])
     ], ItemDetailPage);
     return ItemDetailPage;
 }());

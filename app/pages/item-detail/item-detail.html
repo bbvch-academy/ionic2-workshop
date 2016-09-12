@@ -13,9 +13,12 @@
         Cancel
       </button>
   </ion-buttons>
-  <ion-buttons end *ngIf="isNewTask">
-      <button (click)="saveNewTaskButtonTapped($event)">
+  <ion-buttons end>
+      <button *ngIf="isNewTask" (click)="saveNewTaskButtonTapped($event)">
         Save
+      </button>
+      <button *ngIf="!isNewTask" (click)="deleteButtonTapped($event)">
+        <ion-icon name="trash"></ion-icon>
       </button>
   </ion-buttons>
   </ion-navbar>

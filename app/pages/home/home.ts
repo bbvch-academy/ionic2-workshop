@@ -41,7 +41,7 @@ export class HomePage {
 
   itemTapped($event: MouseEvent, item) {
     console.log('itemTapped '+event);
-    this.navCtrl.push(ItemDetailPage, {'item': item});
+    this.navCtrl.push(ItemDetailPage, {'item': item, 'parent':this});
   }
 
   checkboxTapped($event: MouseEvent, item) {
@@ -70,6 +70,15 @@ export class HomePage {
     let index = this.taskList.length -1 ;
     newItem.id = this.taskList[index].id + 1;
     this.taskList.push(newItem);
+  }
+
+  deleteItem(item) {
+    for(let i = 0; i < this.taskList.length; i++) {
+      if(this.taskList[i] == item){
+          this.taskList.splice(i, 1);
+          break;
+      }
+    }
   }
 }
 
