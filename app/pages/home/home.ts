@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, LoadingController, Loading, Refresher, ModalController } from 'ionic-angular';
+import { NavController, LoadingController, Loading, Refresher, ModalController, ToastController } from 'ionic-angular';
 import { MyData } from '../../providers/my-data/my-data';
 //import { TaskListModel } from '../../models/task-list-model';
 import { ItemDetailPage } from '../item-detail/item-detail';
@@ -13,7 +13,11 @@ export class HomePage {
   public taskList = [];
   private loading: Loading;
 
-  constructor(public navCtrl: NavController, private dataService: MyData, private loadingCtrl: LoadingController, private modalCtrl: ModalController) {
+  constructor(public navCtrl: NavController, 
+              public dataService: MyData, 
+              public loadingCtrl: LoadingController, 
+              public modalCtrl: ModalController,
+              public toastCtrl: ToastController) {
     this.loading = this.loadingCtrl.create({
       content: "Loading...",
       dismissOnPageChange: true
@@ -73,12 +77,20 @@ export class HomePage {
   }
 
   deleteItem(item) {
+    let success = false;
     for(let i = 0; i < this.taskList.length; i++) {
       if(this.taskList[i] == item){
           this.taskList.splice(i, 1);
+          success = true;
           break;
       }
     }
+    let message = (success ? `${item.title} successfully deleted.`: `Could not delete ${item.title}`);
+    let toast = this.toastCtrl.create({
+      message: message,
+      duration: 3000,
+    });
+    toast.present();
   }
 }
 

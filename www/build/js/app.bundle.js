@@ -51,11 +51,12 @@ var my_data_1 = require('../../providers/my-data/my-data');
 //import { TaskListModel } from '../../models/task-list-model';
 var item_detail_1 = require('../item-detail/item-detail');
 var HomePage = (function () {
-    function HomePage(navCtrl, dataService, loadingCtrl, modalCtrl) {
+    function HomePage(navCtrl, dataService, loadingCtrl, modalCtrl, toastCtrl) {
         this.navCtrl = navCtrl;
         this.dataService = dataService;
         this.loadingCtrl = loadingCtrl;
         this.modalCtrl = modalCtrl;
+        this.toastCtrl = toastCtrl;
         this.taskList = [];
         this.loading = this.loadingCtrl.create({
             content: "Loading...",
@@ -110,19 +111,27 @@ var HomePage = (function () {
         this.taskList.push(newItem);
     };
     HomePage.prototype.deleteItem = function (item) {
+        var success = false;
         for (var i = 0; i < this.taskList.length; i++) {
             if (this.taskList[i] == item) {
                 this.taskList.splice(i, 1);
+                success = true;
                 break;
             }
         }
+        var message = (success ? item.title + " successfully deleted." : "Could not delete " + item.title);
+        var toast = this.toastCtrl.create({
+            message: message,
+            duration: 3000,
+        });
+        toast.present();
     };
     HomePage = __decorate([
         core_1.Component({
             templateUrl: 'build/pages/home/home.html',
             providers: [my_data_1.MyData]
         }), 
-        __metadata('design:paramtypes', [ionic_angular_1.NavController, my_data_1.MyData, ionic_angular_1.LoadingController, ionic_angular_1.ModalController])
+        __metadata('design:paramtypes', [ionic_angular_1.NavController, my_data_1.MyData, ionic_angular_1.LoadingController, ionic_angular_1.ModalController, ionic_angular_1.ToastController])
     ], HomePage);
     return HomePage;
 }());
@@ -179,10 +188,12 @@ var ItemDetailPage = (function () {
                 {
                     text: 'Delete',
                     handler: function () {
-                        var parent = _this.params.get("parent");
-                        parent.deleteItem(_this.item);
                         var navTransition = alert.dismiss();
-                        navTransition.then(function () { return _this.viewCtrl.dismiss(); });
+                        navTransition.then(function () {
+                            _this.viewCtrl.dismiss();
+                            var parent = _this.params.get("parent");
+                            parent.deleteItem(_this.item);
+                        });
                     }
                 }]
         });

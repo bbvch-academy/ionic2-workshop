@@ -16,9 +16,9 @@ export class ItemDetailPage {
   public item; 
   public isNewTask = false;
 
-  constructor(private navCtrl: NavController, 
-              private params: NavParams, 
-              private viewCtrl: ViewController, 
+  constructor(public navCtrl: NavController, 
+              public params: NavParams, 
+              public viewCtrl: ViewController, 
               public alertCtrl: AlertController) {
 
     this.item = params.get('item');
@@ -48,10 +48,12 @@ export class ItemDetailPage {
         {
           text: 'Delete',
           handler: () => {
-            let parent:HomePage = this.params.get("parent");
-            parent.deleteItem(this.item);
             let navTransition = alert.dismiss();
-            navTransition.then(() => this.viewCtrl.dismiss());
+            navTransition.then(() => {
+              this.viewCtrl.dismiss()
+              let parent:HomePage = this.params.get("parent");
+              parent.deleteItem(this.item);
+            });
           }
         }]
     });
