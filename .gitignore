@@ -1,0 +1,9 @@
+bin/
+bld/
+node_modules/
+www/build/
+platforms/
+plugins/
+.DS_Store
+.vs
+*.user
