@@ -218,6 +218,27 @@ var ItemDetailPage = (function () {
     };
     ItemDetailPage.prototype.addPictureButtonTapped = function ($event) {
         var _this = this;
+        var buttonLabels = ['Camera', 'Gallery'];
+        ionic_native_1.ActionSheet.show({
+            'title': 'Add a picture from...?',
+            'buttonLabels': buttonLabels,
+            'addCancelButtonWithLabel': 'Cancel'
+        }).then(function (buttonIndex) {
+            console.log('Button pressed: ' + buttonIndex);
+            switch (buttonIndex) {
+                case 1:
+                    _this.takePictureFromCamera();
+                    break;
+                case 2:
+                    _this.takePictureFromGallery();
+                    break;
+                default:
+                    break;
+            }
+        });
+    };
+    ItemDetailPage.prototype.takePictureFromCamera = function () {
+        var _this = this;
         ionic_native_1.Camera.getPicture({
             destinationType: ionic_native_1.Camera.DestinationType.DATA_URL,
             targetWidth: 1000,
@@ -228,6 +249,9 @@ var ItemDetailPage = (function () {
         }, function (err) {
             console.log(err);
         });
+    };
+    ItemDetailPage.prototype.takePictureFromGallery = function () {
+        // TODO: use ImagePicker
     };
     ItemDetailPage = __decorate([
         core_1.Component({

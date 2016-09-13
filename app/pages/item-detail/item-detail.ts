@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, ViewController, AlertController } from 'ionic-angular';
 import { HomePage } from '../../pages/home/home';
-import { Camera } from 'ionic-native';
+import { Camera, ImagePicker, ActionSheet } from 'ionic-native';
 
 /*
   Generated class for the ItemDetailPage page.
@@ -67,6 +67,27 @@ export class ItemDetailPage {
   }
 
   addPictureButtonTapped($event) {
+    let buttonLabels = ['Camera', 'Gallery'];
+    ActionSheet.show({
+      'title': 'Add a picture from...?',
+      'buttonLabels': buttonLabels,
+      'addCancelButtonWithLabel': 'Cancel'
+    }).then((buttonIndex: number) => {
+      console.log('Button pressed: ' + buttonIndex);
+      switch (buttonIndex) {
+        case 1:
+          this.takePictureFromCamera();
+          break;
+      case 2:
+          this.takePictureFromGallery();
+          break;
+        default:
+          break;
+      }
+    });
+  }
+
+  takePictureFromCamera() {
     Camera.getPicture({
         destinationType: Camera.DestinationType.DATA_URL,
         targetWidth: 1000,
@@ -77,5 +98,9 @@ export class ItemDetailPage {
     }, (err) => {
         console.log(err);
     });
+  }
+
+  takePictureFromGallery() {
+    // TODO: use ImagePicker
   }
 }

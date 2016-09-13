@@ -30,6 +30,12 @@
         },
         "cordova-plugin-camera": {
             "PACKAGE_NAME": "com.ionicframework.todoapp395769"
+        },
+        "cordova-plugin-image-picker": {
+            "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
+        },
+        "cordova-plugin-actionsheet": {
+            "PACKAGE_NAME": "$(PRODUCT_BUNDLE_IDENTIFIER)"
         }
     },
     "dependent_plugins": {
