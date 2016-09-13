@@ -28,8 +28,12 @@ export class MyData {
   getData() {
     return new Promise(resolve => {
       this.storage.get(_key).then(value => {
-        let data = JSON.parse(value);
-        resolve(data);
+        if (value) {
+          let data = JSON.parse(value);
+          resolve(data);
+        } else {
+          resolve([]);
+        }
       });
     });
     

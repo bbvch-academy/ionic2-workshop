@@ -43,4 +43,10 @@
       <ion-toggle [(ngModel)]="item.completed"></ion-toggle>
     </ion-item>
   </ion-list>
+  
+  <button padding *ngIf="!item.picture" block (click)="addPictureButtonTapped($event)">Add picture...</button>
+  <ion-card *ngIf="item.picture">
+    <img [src]="item.picture"/>
+  </ion-card>
+
 </ion-content>

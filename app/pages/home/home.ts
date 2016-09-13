@@ -100,5 +100,10 @@ export class HomePage {
     this.dataService.saveData(this.taskList);
   }
   
+  updateItem(item) {
+    // Save to db
+    this.dataService.saveData(this.taskList);
+  }
+
 }
 

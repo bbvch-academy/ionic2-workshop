@@ -134,6 +134,10 @@ var HomePage = (function () {
         // Save to db
         this.dataService.saveData(this.taskList);
     };
+    HomePage.prototype.updateItem = function (item) {
+        // Save to db
+        this.dataService.saveData(this.taskList);
+    };
     HomePage = __decorate([
         core_1.Component({
             templateUrl: 'build/pages/home/home.html',
@@ -158,6 +162,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var ionic_angular_1 = require('ionic-angular');
+var ionic_native_1 = require('ionic-native');
 /*
   Generated class for the ItemDetailPage page.
 
@@ -177,6 +182,10 @@ var ItemDetailPage = (function () {
             this.isNewTask = true;
         }
     }
+    ItemDetailPage.prototype.ionViewWillLeave = function () {
+        var parent = this.params.get("parent");
+        parent.updateItem(this.item);
+    };
     ItemDetailPage.prototype.saveNewTaskButtonTapped = function ($event) {
         this.viewCtrl.dismiss(this.item);
     };
@@ -207,6 +216,19 @@ var ItemDetailPage = (function () {
         });
         alert.present();
     };
+    ItemDetailPage.prototype.addPictureButtonTapped = function ($event) {
+        var _this = this;
+        ionic_native_1.Camera.getPicture({
+            destinationType: ionic_native_1.Camera.DestinationType.DATA_URL,
+            targetWidth: 1000,
+            targetHeight: 1000
+        }).then(function (imageData) {
+            // imageData is a base64 encoded string
+            _this.item.picture = "data:image/jpeg;base64," + imageData;
+        }, function (err) {
+            console.log(err);
+        });
+    };
     ItemDetailPage = __decorate([
         core_1.Component({
             templateUrl: 'build/pages/item-detail/item-detail.html',
@@ -217,7 +239,7 @@ var ItemDetailPage = (function () {
 }());
 exports.ItemDetailPage = ItemDetailPage;
 
-},{"@angular/core":152,"ionic-angular":466}],4:[function(require,module,exports){
+},{"@angular/core":152,"ionic-angular":466,"ionic-native":493}],4:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -250,8 +272,13 @@ var MyData = (function () {
         var _this = this;
         return new Promise(function (resolve) {
             _this.storage.get(_key).then(function (value) {
-                var data = JSON.parse(value);
-                resolve(data);
+                if (value) {
+                    var data = JSON.parse(value);
+                    resolve(data);
+                }
+                else {
+                    resolve([]);
+                }
             });
         });
     };

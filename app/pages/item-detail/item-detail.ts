@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, ViewController, AlertController } from 'ionic-angular';
 import { HomePage } from '../../pages/home/home';
+import { Camera } from 'ionic-native';
 
 /*
   Generated class for the ItemDetailPage page.
@@ -19,13 +20,18 @@ export class ItemDetailPage {
   constructor(public navCtrl: NavController, 
               public params: NavParams, 
               public viewCtrl: ViewController, 
-              public alertCtrl: AlertController) {
+              public alertCtrl: AlertController ) {
 
     this.item = params.get('item');
     if (this.item === undefined) {
       this.item = { title: 'New Task' };
       this.isNewTask = true;
     }
+  }
+
+  ionViewWillLeave() {
+    let parent:HomePage = this.params.get("parent");
+    parent.updateItem(this.item);
   }
 
   saveNewTaskButtonTapped($event) {
@@ -58,5 +64,18 @@ export class ItemDetailPage {
         }]
     });
     alert.present();
+  }
+
+  addPictureButtonTapped($event) {
+    Camera.getPicture({
+        destinationType: Camera.DestinationType.DATA_URL,
+        targetWidth: 1000,
+        targetHeight: 1000
+    }).then((imageData) => {
+      // imageData is a base64 encoded string
+        this.item.picture = "data:image/jpeg;base64," + imageData;
+    }, (err) => {
+        console.log(err);
+    });
   }
 }
