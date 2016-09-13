@@ -24,16 +24,14 @@ export class HomePage {
     });
   }
 
+  
   ionViewLoaded() {
+    this.loading.present();
     this.dataService.getData().then(data => {
       this.taskList = data as [];
       this.loading.dismiss();
     });
     console.log(this.taskList);
-  }
-
-  ionViewDidEnter() {
-    this.loading.present();
   }
 
   doRefresh(refresher: Refresher) {
@@ -52,6 +50,8 @@ export class HomePage {
     $event.stopPropagation();
     console.log('checkboxTapped '+event);
     item.completed = !item.completed;
+    // Save to db
+    this.dataService.saveData(this.taskList);
   }
 
   addItemButtonTapped($event) {
@@ -64,16 +64,20 @@ export class HomePage {
       {
         this.addItem(data);
       }
-      // Hack: Without this line the would remain stuck
-      controller.destroy();
     });
     controller.present();
   }
 
   addItem(newItem) {
-    let index = this.taskList.length -1 ;
-    newItem.id = this.taskList[index].id + 1;
+    let index = this.taskList.length - 1 ;
+    if(index > 0) {
+      newItem.id = this.taskList[index].id + 1;
+    } else {
+      newItem.id = 1;
+    }
     this.taskList.push(newItem);
+    // Save to db
+    this.dataService.saveData(this.taskList);
   }
 
   deleteItem(item) {
@@ -85,12 +89,16 @@ export class HomePage {
           break;
       }
     }
+    // Show toast
     let message = (success ? `${item.title} successfully deleted.`: `Could not delete ${item.title}`);
     let toast = this.toastCtrl.create({
       message: message,
       duration: 3000,
     });
     toast.present();
+    // Save to db
+    this.dataService.saveData(this.taskList);
   }
+  
 }
 

@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+//import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/delay';
+import { Storage, SqlStorage } from 'ionic-angular';
 
 //import { TaskListModel} from '../../models/task-list-model';
 /*
@@ -10,25 +11,33 @@ import 'rxjs/add/operator/delay';
   See https://angular.io/docs/ts/latest/guide/dependency-injection.html
   for more info on providers and Angular 2 DI.
 */
+
+const _dbName = 'todoDB';
+const _key = 'todos';
+
 @Injectable()
 export class MyData {
 
-  constructor(private http: Http) {}
+  private storage: Storage;
+  
+
+  constructor() {
+    this.storage = new Storage(SqlStorage, {name: _dbName} );
+  }
   
   getData() {
     return new Promise(resolve => {
-      // We're using Angular Http provider to request the data,
-      // then on the response it'll map the JSON data to a parsed JS object.
-      // Next we process the data and resolve the promise with the new data.
-      this.http.get('assets/data.json')
-        .delay(2000)
-        .map(res => res.json())
-        .subscribe(data => {
-          // we've got back the raw data, now generate the core schedule data
-          // and save the data for later reference
-          resolve(data);
-        });
+      this.storage.get(_key).then(value => {
+        let data = JSON.parse(value);
+        resolve(data);
+      });
     });
+    
+  }
+
+  saveData(data: any[]) {
+    let newData = JSON.stringify(data);
+    return this.storage.set(_key, newData);
   }
 }
 

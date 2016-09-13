@@ -65,14 +65,12 @@ var HomePage = (function () {
     }
     HomePage.prototype.ionViewLoaded = function () {
         var _this = this;
+        this.loading.present();
         this.dataService.getData().then(function (data) {
             _this.taskList = data;
             _this.loading.dismiss();
         });
         console.log(this.taskList);
-    };
-    HomePage.prototype.ionViewDidEnter = function () {
-        this.loading.present();
     };
     HomePage.prototype.doRefresh = function (refresher) {
         var _this = this;
@@ -89,6 +87,8 @@ var HomePage = (function () {
         $event.stopPropagation();
         console.log('checkboxTapped ' + event);
         item.completed = !item.completed;
+        // Save to db
+        this.dataService.saveData(this.taskList);
     };
     HomePage.prototype.addItemButtonTapped = function ($event) {
         var _this = this;
@@ -100,15 +100,20 @@ var HomePage = (function () {
             if (data !== undefined) {
                 _this.addItem(data);
             }
-            // Hack: Without this line the would remain stuck
-            controller.destroy();
         });
         controller.present();
     };
     HomePage.prototype.addItem = function (newItem) {
         var index = this.taskList.length - 1;
-        newItem.id = this.taskList[index].id + 1;
+        if (index > 0) {
+            newItem.id = this.taskList[index].id + 1;
+        }
+        else {
+            newItem.id = 1;
+        }
         this.taskList.push(newItem);
+        // Save to db
+        this.dataService.saveData(this.taskList);
     };
     HomePage.prototype.deleteItem = function (item) {
         var success = false;
@@ -119,12 +124,15 @@ var HomePage = (function () {
                 break;
             }
         }
+        // Show toast
         var message = (success ? item.title + " successfully deleted." : "Could not delete " + item.title);
         var toast = this.toastCtrl.create({
             message: message,
             duration: 3000,
         });
         toast.present();
+        // Save to db
+        this.dataService.saveData(this.taskList);
     };
     HomePage = __decorate([
         core_1.Component({
@@ -221,9 +229,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var http_1 = require('@angular/http');
+//import { Http } from '@angular/http';
 require('rxjs/add/operator/map');
 require('rxjs/add/operator/delay');
+var ionic_angular_1 = require('ionic-angular');
 //import { TaskListModel} from '../../models/task-list-model';
 /*
   Generated class for the MyData provider.
@@ -231,35 +240,34 @@ require('rxjs/add/operator/delay');
   See https://angular.io/docs/ts/latest/guide/dependency-injection.html
   for more info on providers and Angular 2 DI.
 */
+var _dbName = 'todoDB';
+var _key = 'todos';
 var MyData = (function () {
-    function MyData(http) {
-        this.http = http;
+    function MyData() {
+        this.storage = new ionic_angular_1.Storage(ionic_angular_1.SqlStorage, { name: _dbName });
     }
     MyData.prototype.getData = function () {
         var _this = this;
         return new Promise(function (resolve) {
-            // We're using Angular Http provider to request the data,
-            // then on the response it'll map the JSON data to a parsed JS object.
-            // Next we process the data and resolve the promise with the new data.
-            _this.http.get('assets/data.json')
-                .delay(2000)
-                .map(function (res) { return res.json(); })
-                .subscribe(function (data) {
-                // we've got back the raw data, now generate the core schedule data
-                // and save the data for later reference
+            _this.storage.get(_key).then(function (value) {
+                var data = JSON.parse(value);
                 resolve(data);
             });
         });
     };
+    MyData.prototype.saveData = function (data) {
+        var newData = JSON.stringify(data);
+        return this.storage.set(_key, newData);
+    };
     MyData = __decorate([
         core_1.Injectable(), 
-        __metadata('design:paramtypes', [http_1.Http])
+        __metadata('design:paramtypes', [])
     ], MyData);
     return MyData;
 }());
 exports.MyData = MyData;
 
-},{"@angular/core":152,"@angular/http":279,"rxjs/add/operator/delay":580,"rxjs/add/operator/map":581}],5:[function(require,module,exports){
+},{"@angular/core":152,"ionic-angular":466,"rxjs/add/operator/delay":580,"rxjs/add/operator/map":581}],5:[function(require,module,exports){
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
