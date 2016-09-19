@@ -27,26 +27,31 @@
 
 
 <ion-content class="outer-content">
-  <ion-list>
-    <ion-item>
-      <ion-label primary floating>Title</ion-label>
-      <ion-input [(ngModel)]="item.title"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label primary floating>Description</ion-label>
-      <ion-textarea [(ngModel)]="item.description" rows="6"></ion-textarea>
-    </ion-item>
-  </ion-list>
-  <ion-list>
-    <ion-item>
-      <ion-label>Completed</ion-label>
-      <ion-toggle [(ngModel)]="item.completed"></ion-toggle>
-    </ion-item>
-  </ion-list>
   
-  <button padding *ngIf="!item.picture" block (click)="addPictureButtonTapped($event)">Add picture...</button>
-  <ion-card *ngIf="item.picture">
-    <img [src]="item.picture"/>
+  <ion-card>
+    <ion-list>
+      <ion-item>
+        <ion-label primary floating>Title</ion-label>
+        <ion-input [(ngModel)]="item.title"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label primary floating>Description</ion-label>
+        <ion-textarea [(ngModel)]="item.description" rows="6"></ion-textarea>
+      </ion-item>
+    </ion-list>
+    <ion-list>
+      <ion-item>
+        <ion-label>Completed</ion-label>
+        <ion-toggle [(ngModel)]="item.completed"></ion-toggle>
+      </ion-item>
+    </ion-list>
+  </ion-card>
+  
+  <ion-card detail-none (click)="addPictureButtonTapped($event)">
+    <ion-list *ngIf="!item.picture">
+      <ion-item>Add picture...</ion-item>
+    </ion-list>
+    <img *ngIf="item.picture" [src]="item.picture"/>
   </ion-card>
 
 </ion-content>

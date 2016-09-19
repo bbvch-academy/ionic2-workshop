@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, ViewController, AlertController } from 'ionic-angular';
 import { HomePage } from '../../pages/home/home';
-import { Camera, ImagePicker, ActionSheet } from 'ionic-native';
+import { Camera, ActionSheet } from 'ionic-native';
 
 /*
   Generated class for the ItemDetailPage page.
@@ -76,10 +76,10 @@ export class ItemDetailPage {
       console.log('Button pressed: ' + buttonIndex);
       switch (buttonIndex) {
         case 1:
-          this.takePictureFromCamera();
+          this.takePicture(false);
           break;
       case 2:
-          this.takePictureFromGallery();
+          this.takePicture(true);
           break;
         default:
           break;
@@ -87,11 +87,13 @@ export class ItemDetailPage {
     });
   }
 
-  takePictureFromCamera() {
+  takePicture(fromLibrary: boolean) {
     Camera.getPicture({
         destinationType: Camera.DestinationType.DATA_URL,
-        targetWidth: 1000,
-        targetHeight: 1000
+        targetWidth: 800,
+        targetHeight: 600,
+        sourceType: (fromLibrary ? Camera.PictureSourceType.PHOTOLIBRARY : Camera.PictureSourceType.CAMERA),
+        allowEdit: true
     }).then((imageData) => {
       // imageData is a base64 encoded string
         this.item.picture = "data:image/jpeg;base64," + imageData;
@@ -100,7 +102,4 @@ export class ItemDetailPage {
     });
   }
 
-  takePictureFromGallery() {
-    // TODO: use ImagePicker
-  }
 }
