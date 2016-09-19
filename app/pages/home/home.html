@@ -18,8 +18,9 @@
       refreshingText="Fetching...">
     </ion-refresher-content>
   </ion-refresher>
+  <ion-searchbar (ionInput)="filterItems($event)"></ion-searchbar>
   <ion-list>
-    <button ion-item detailPush *ngFor="let item of taskList" (click)="itemTapped($event, item)">
+    <button ion-item *ngFor="let item of taskList" (click)="itemTapped($event, item)">
       <!--<ion-checkbox [(ngModel)]="item.completed"></ion-checkbox>-->
       <ion-label>{{item.title}}</ion-label>
       <button clear item-left (click)="checkboxTapped($event, item)">

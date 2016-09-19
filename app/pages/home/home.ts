@@ -11,6 +11,7 @@ import { ItemDetailPage } from '../item-detail/item-detail';
 export class HomePage {
 
   public taskList = [];
+  public originalList = [];
   private loading: Loading;
 
   constructor(public navCtrl: NavController, 
@@ -24,11 +25,11 @@ export class HomePage {
     });
   }
 
-  
   ionViewLoaded() {
     this.loading.present();
     this.dataService.getData().then(data => {
       this.taskList = data as [];
+      this.originalList = this.taskList;
       this.loading.dismiss();
     });
     console.log(this.taskList);
@@ -37,6 +38,7 @@ export class HomePage {
   doRefresh(refresher: Refresher) {
     this.dataService.getData().then(data => {
       this.taskList = data as [];
+      this.originalList = this.taskList;
       refresher.complete();
     });
   }
@@ -105,5 +107,20 @@ export class HomePage {
     this.dataService.saveData(this.taskList);
   }
 
+  filterItems(event: any) {
+    // Reset items back to all of the items
+    this.taskList = this.originalList;
+      
+    // set val to the value of the searchbar
+    let val = event.target.value;
+
+    // if the value is an empty string don't filter the items
+    if (val && val.trim() != '') {
+      this.taskList = this.taskList.filter((item) => {
+        return (item.title.toLowerCase().indexOf(val.toLowerCase()) > -1);
+      })
+    }
+
+  }
 }
 
