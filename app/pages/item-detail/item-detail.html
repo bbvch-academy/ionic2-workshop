@@ -38,6 +38,10 @@
         <ion-label primary floating>Description</ion-label>
         <ion-textarea [(ngModel)]="item.description" rows="6"></ion-textarea>
       </ion-item>
+      <ion-item>
+        <ion-label>Due date</ion-label>
+        <ion-datetime displayFormat="DDDD D/MMM/YYYY - HH:mm" pickerFormat="YYYY MMM D HH:mm" min="2016" max="2020-10-31" [(ngModel)]="item.dueDate"></ion-datetime>
+      </ion-item>
     </ion-list>
     <ion-list>
       <ion-item>
@@ -53,5 +57,7 @@
     </ion-list>
     <img *ngIf="item.picture" [src]="item.picture"/>
   </ion-card>
+
+
 
 </ion-content>
