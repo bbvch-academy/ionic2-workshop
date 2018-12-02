@@ -1,3 +1,5 @@
+THIS REPO IS OUT OF DATE, NEW VERSION AT https://github.com/bbvch-academy/AppsDerZukunftMitWebtechnologien
+
 # ionic2-workshop
 
 A step-by-step TODO app for the bbv Academy
